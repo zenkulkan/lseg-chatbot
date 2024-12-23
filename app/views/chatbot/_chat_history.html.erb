@@ -1,0 +1,60 @@
+<% session[:chat_history].each_with_index do |message, index| %>
+  <div class="message-row">
+    <div class="message <%= message['role'] == 'user' ? 'user-message' : 'ai-message' %>">
+      <% if message['role'] == 'ai' && message['message'].include?('Please select a stock') %>
+        <% message['message'].split("\n").each_with_index do |line, index| %>
+          <% if index > 0 %>
+            <%= form_with(url: message_path, method: :post, local: true) do |form| %>
+              <%= form.hidden_field :message, value: line %>
+              <%= form.submit line, class: 'stock-link' %>
+            <% end %>
+          <% else %>
+            <p> <%= line %> </p>
+          <% end %>
+        <% end %>
+      <% elsif message['role'] == 'ai' && message['message'].include?('Please select a Stock Exchange') %>
+        <% message['message'].split("\n").each_with_index do |line, index| %>
+          <% if index > 0 %>
+            <%= form_with(url: message_path, method: :post, local: true) do |form| %>
+              <%= form.hidden_field :message, value: line %>
+              <%= form.submit line, class: 'stock-link' %>
+            <% end %>
+          <% else %>
+            <p> <%= line %> </p>
+          <% end %>
+        <% end %>
+      <% elsif message['role'] == 'ai' && message['message'].include?('The price of') %>
+        <p><%= message['message'] %></p>
+        <%= form_with(url: message_path, method: :post, local: true) do |form| %>
+          <%= form.hidden_field :message, value: session[:selected_exchange] %>
+          <%= form.submit 'Go Back', class: 'stock-link' %>
+        <% end %>
+
+        <%= form_with(url: message_path, method: :post, local: true) do |form| %>
+          <%= form.hidden_field :message, value: 'main menu' %>
+          <%= form.submit 'Main menu', class: 'stock-link' %>
+        <% end %>
+      <% else %>
+        <%= message['message'] %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var chatContainer = document.getElementById('chat-container');
+
+    function scrollToBottom() {
+      if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    }
+
+    scrollToBottom(); // Scroll to bottom on initial load
+
+    document.addEventListener('turbo:load', function() {
+      console.log("TEST");
+      scrollToBottom();
+    });
+  });
+</script>

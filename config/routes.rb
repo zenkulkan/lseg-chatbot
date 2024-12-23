@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root 'chatbot#index'
+  post 'message', to: 'chatbot#message'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

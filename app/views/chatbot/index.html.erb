@@ -1,22 +1,9 @@
-<h1>Welcome to the Stock Chatbot</h1>
+<h1>Stock Chatbot</h1>
 
-<% if @selected_exchange.nil? %>
-  <h2>Please select a Stock Exchange</h2>
-  <ul>
-    <% @stock_data.each do |exchange| %>
-      <li><a href="/?exchange=<%= exchange['code'] %>"><%= exchange['stockExchange'] %></a></li>
-    <% end %>
-  </ul>
-<% elsif @selected_stock.nil? %>
-  <h2>Please select a stock</h2>
-  <ul>
-    <% @stock_data.find { |exchange| exchange['code'] == @selected_exchange }['topStocks'].each do |stock| %>
-      <li><a href="/?exchange=<%= @selected_exchange %>&stock=<%= stock['code'] %>"><%= stock['stockName'] %></a></li>
-    <% end %>
-  </ul>
-<% else %>
-  <h2>Stock Price of <%= @selected_stock['stockName'] %> is <%= @selected_stock['price'] %></h2>
-  <a href="/?exchange=<%= @selected_exchange %>">Go back to stock menu</a>
-  <br>
-  <a href="/">Go back to main menu</a>
-<% end %>
+<div id="chat-container">
+  <%= render partial: 'chat_history' %>
+</div>
+
+<div id="message-input">
+  <%= render partial: 'message_form' %>
+</div>

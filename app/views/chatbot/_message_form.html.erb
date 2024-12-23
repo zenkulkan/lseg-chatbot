@@ -1,0 +1,4 @@
+<%= form_with(url: message_path, method: :post, local: true) do |form| %>
+  <%= form.text_field :message, placeholder: 'Type your message...' %>
+  <%= form.submit 'Send', class: 'submit-button' %>
+<% end %>

@@ -12,5 +12,11 @@
 
   <body>
     <%= yield %>
+    <script>
+      document.addEventListener('turbo:load', function() {
+        var chatContainer = document.getElementById('chat-container');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      });
+    </script>
   </body>
 </html>
