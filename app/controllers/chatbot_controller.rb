@@ -1,15 +1,13 @@
 class ChatbotController < ApplicationController
   before_action :get_stock_data
   def index
-    session[:chat_history] ||= [{ role: 'ai', message: ai_initial_message }]
+    session[:chat_history] = [{ role: 'ai', message: ai_initial_message }] unless session[:chat_history]
   end
 
   def message
-
     user_message = params[:message].strip
     reset_session if user_message.downcase == "main menu"
-
-    session[:chat_history] ||= [{ role: 'ai', message: ai_initial_message }]
+    session[:chat_history] = [{ role: 'ai', message: ai_initial_message }] unless session[:chat_history]
     if user_message != "main menu"
       session[:chat_history] << { role: 'user', message: user_message }
 
@@ -89,11 +87,6 @@ class ChatbotController < ApplicationController
   end
 
   def ai_initial_message
-    [
-      'Please select a Stock Exchange',
-      'London Stock Exchange',
-      'New York Stock Exchange',
-      'NASDAQ'
-  ].join("\n")
+    "Please select a Stock Exchange\nLondon Stock Exchange\nNew York Stock Exchange\nNASDAQ"
   end
 end
