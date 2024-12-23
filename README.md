@@ -114,7 +114,9 @@ The chatbot follows a simple logic:
 2.  Once the user selects an exchange, the AI displays a list of 5 stocks traded on that exchange.
 3.  The user can then select a stock from the list to see its latest price.
 4.  After displaying the stock price, the AI provides "Go Back" and "Main menu" options for navigation.
-5.  I desinged that "Main menu" will reset the session and remove all the chat hitories
+5.  Selecting "Main menu" will reset the session, clearing all chat history and returning the user to the initial state.
+
+This ensures a fresh start for new interactions and avoids any potential confusion from previous selections.
 
 The chatbot uses the `session` to keep track of the selected exchange and stock. The AI responses are generated dynamically based on the user's selections and the data in the JSON file.
 
