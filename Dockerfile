@@ -16,6 +16,8 @@ RUN bundle install
 # Copy the rest of the application code
 COPY . .
 
+RUN rails assets:precompile
+
 # Expose ports 3000 (Rails) and 6379 (Redis)
 EXPOSE 3000
 EXPOSE 6379
