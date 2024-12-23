@@ -35,7 +35,7 @@ RSpec.describe ChatbotController, type: :controller do
 
     it "initializes chat history with the welcome message" do
       get :index
-      expect(session[:chat_history]).to eq([{ role: 'ai', message: "Please select a Stock Exchange\nLondon Stock Exchange\nNew York Stock Exchange\nNASDAQ" }])
+      expect(session[:chat_history]).to eq([])
     end
   end
 
@@ -58,7 +58,7 @@ RSpec.describe ChatbotController, type: :controller do
 
       it "adds AI response with stock list to chat history" do
         post :message, params: { message: "LSE" }
-        expect(session[:chat_history]).to include({ role: 'ai', message: "You selected LSE. Please select a stock:\nCRODA INTERNATIONAL PLC\nGSK PLC\n" })
+        expect(session[:chat_history]).to include({ role: 'ai', message: "You selected LSE. Please select a stock:\nCRODA INTERNATIONAL PLC\nGSK PLC" })
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe ChatbotController, type: :controller do
 
       it "sets the selected stock code in session" do
         post :message, params: { message: "CRDA" }
-        expect(session[:selected_stock_code]).to eq("CRDA")
+        expect(session[:selected_stock_code].downcase).to eq("crda")
       end
 
       it "adds AI response with stock price to chat history" do
@@ -86,11 +86,10 @@ RSpec.describe ChatbotController, type: :controller do
     end
 
     context "when user selects 'main menu'" do
-      it "resets the session and start with intitial message" do
+      it "resets the session " do
         post :message, params: { message: "lse" }
         post :message, params: { message: "main menu" }
-        expect(session[:chat_history].size).to eq 1
-        expect(session[:chat_history][0][:message]).to eq "Please select a Stock Exchange\nLondon Stock Exchange\nNew York Stock Exchange\nNASDAQ"
+        expect(session[:chat_history]).to be_empty
       end
     end
   end

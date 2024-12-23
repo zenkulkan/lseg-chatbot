@@ -1,24 +1,142 @@
-# README
+# LSEG Chatbot Challenge
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This project implements a chatbot UI for the LSEG pre-interview coding challenge. It allows users to interact with a chatbot to get stock information from different exchanges (LSEG, NASDAQ, NYSE).
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+*   Select a stock exchange (LSEG, NASDAQ, NYSE).
+*   View a list of 5 stocks for the selected exchange.
+*   Select a stock to see its latest price.
+*   "Go Back" and "Main menu" options for navigation.
+*   Chat-like interface with user and AI messages.
+*   Interactive stock selection within AI messages.
+*   Uses Redis to store stock data from json file.
 
-* System dependencies
+## Technologies Used
 
-* Configuration
+*   Ruby on Rails (web application framework)
+*   Redis (in-memory data store)
+*   HTML, CSS, JavaScript (frontend)
+*   Docker (containerization)
+*   RSpec (testing framework)
 
-* Database creation
+## How to Run
+## Ruby
+### Prerequisites
 
-* Database initialization
+*   Ruby (version 3.2.0 recommended)
+*   Bundler (gem install bundler)
+*   Redis (make sure Redis is installed and running on your system)
 
-* How to run the test suite
+### Steps
 
-* Services (job queues, cache servers, search engines, etc.)
+1.  Clone the repository:
 
-* Deployment instructions
+    ```bash
+    git clone https://github.com/zenkulkan/lseg-chatbot.git
+    ```
 
-* ...
+2.  Navigate to the project directory:
+
+    ```bash
+    cd lseg-chatbot
+    ```
+
+3.  Install dependencies:
+
+    ```bash
+    bundle install
+    ```
+
+4.  Start  Redis server
+    ```base
+    redis-server
+    ```
+
+5.  Start the Rails server:
+
+    ```bash
+    rails server
+    ```
+
+6.  Open your web browser and go to `http://localhost:3000` to access the chatbot.
+
+## Docker
+### Prerequisites
+
+*   Docker (make sure Docker is installed on your system)
+
+### Steps
+
+1.  Clone the repository:
+
+    ```bash
+    git clone https://github.com/zenkulkan/lseg-chatbot.git
+    ```
+
+2.  Navigate to the project directory:
+
+    ```bash
+    cd lseg-chatbot
+    ```
+
+3.  Build the Docker image:
+
+    ```bash
+    docker build -t stock-chatbot .
+    ```
+
+4.  Run the Docker container:
+
+    ```bash
+    docker run -p 3000:3000 -p 6379:6379 stock-chatbot
+    ```
+
+5.  Open your web browser and go to `http://localhost:3000` to access the chatbot.
+
+## Code Structure
+
+*   `app/controllers/chatbot_controller.rb`: Contains the controller logic for handling user interactions and generating AI responses.
+*   `app/views/chatbot/index.html.erb`: The main view for the chatbot interface.
+*   `app/views/chatbot/_chat_history.html.erb`: Partial for rendering the chat history.
+*   `app/views/chatbot/_message_form.html.erb`: Partial for rendering the message input form.
+*   `app/assets/stylesheets/chatbot.css`: Contains the CSS styles for the chatbot interface.
+*   `config/initializers/redis.rb`: Configures the Redis connection.
+*   `config/routes.rb`: Defines the routes for the application.
+*   `Dockerfile`: Contains instructions for building the Docker image.
+*   `spec`: Contains RSpec tests for the controller.
+
+## Chatbot Logic
+
+The chatbot follows a simple logic:
+
+1.  When the user first accesses the chatbot, the AI prompts the user to select a stock exchange (LSEG, NASDAQ, NYSE).
+2.  Once the user selects an exchange, the AI displays a list of 5 stocks traded on that exchange.
+3.  The user can then select a stock from the list to see its latest price.
+4.  After displaying the stock price, the AI provides "Go Back" and "Main menu" options for navigation.
+5.  I desinged that "Main menu" will reset the session and remove all the chat hitories
+
+The chatbot uses the `session` to keep track of the selected exchange and stock. The AI responses are generated dynamically based on the user's selections and the data in the JSON file.
+
+The chatbot is designed to be flexible in recognizing user input. For example:
+
+*   **Exchange selection:** The user can enter the full exchange name ("London Stock Exchange"), a partial name("London") or the code ("LSE").
+*   **Stock selection:** The user can enter the full stock name ("CRODA INTERNATIONAL PLC"), a partial name ("CRODA"), or the stock code ("CRDA"). If a partial name matches multiple stocks, the chatbot will select the first match.
+
+## Testing
+
+The `spec` directory contains RSpec tests for the `ChatbotController`. These tests cover various scenarios, including selecting exchanges, selecting stocks, handling invalid input, and resetting the session.
+
+## Additional Notes
+
+*   The chatbot UI is designed to be simple and intuitive, with a focus on functionality.
+*   The code is organized and well-commented to enhance readability and maintainability.
+*   Error handling is implemented to gracefully handle invalid inputs and other potential issues.
+*   The Dockerfile allows for easy deployment and running of the application in a containerized environment.
+
+## Future Improvements
+
+*   Enhance the AI with more sophisticated natural language processing capabilities.
+*   Add more features, such as displaying stock charts or providing financial news updates.
+*   Improve the UI with more advanced styling and animations.
+*   Implement user authentication and personalization.

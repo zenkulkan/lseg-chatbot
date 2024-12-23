@@ -1,18 +1,22 @@
+<div class="message-row">
+  <div class="message ai-message %>">
+    <% init_message = "Please select a Stock Exchange\nLondon Stock Exchange\nNew York Stock Exchange\nNASDAQ"%>
+    <% init_message.split("\n").each_with_index do |line, index| %>
+      <% if index > 0 %>
+        <%= form_with(url: message_path, method: :post, local: true) do |form| %>
+          <%= form.hidden_field :message, value: line %>
+          <%= form.submit line, class: 'stock-link' %>
+        <% end %>
+      <% else %>
+        <p> <%= line %> </p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
 <% session[:chat_history].each_with_index do |message, index| %>
   <div class="message-row">
     <div class="message <%= message['role'] == 'user' ? 'user-message' : 'ai-message' %>">
       <% if message['role'] == 'ai' && message['message'].include?('Please select a stock') %>
-        <% message['message'].split("\n").each_with_index do |line, index| %>
-          <% if index > 0 %>
-            <%= form_with(url: message_path, method: :post, local: true) do |form| %>
-              <%= form.hidden_field :message, value: line %>
-              <%= form.submit line, class: 'stock-link' %>
-            <% end %>
-          <% else %>
-            <p> <%= line %> </p>
-          <% end %>
-        <% end %>
-      <% elsif message['role'] == 'ai' && message['message'].include?('Please select a Stock Exchange') %>
         <% message['message'].split("\n").each_with_index do |line, index| %>
           <% if index > 0 %>
             <%= form_with(url: message_path, method: :post, local: true) do |form| %>
