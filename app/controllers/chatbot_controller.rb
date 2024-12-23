@@ -6,12 +6,13 @@ class ChatbotController < ApplicationController
   end
   def message
     user_message = params[:message].strip
-    reset_session if user_message.downcase == "main menu"
+    user_message_downcase = user_message.downcase
+    reset_session if user_message_downcase == "main menu"
     session[:chat_history] ||= []
 
-    unless user_message == "main menu"
+    unless user_message_downcase == "main menu"
       session[:chat_history] << { role: 'user', message: user_message }
-      session[:chat_history] << { role: 'ai', message: generate_ai_response(user_message.downcase) }
+      session[:chat_history] << { role: 'ai', message: generate_ai_response(user_message_downcase) }
     end
 
     redirect_to root_path
@@ -55,12 +56,14 @@ class ChatbotController < ApplicationController
   end
 
   def extract_exchange_code(input)
+    return if input.length < 3
+
     exchange = @stock_data.find { |ex| ex['stockExchange'].downcase.include?(input) || ex['code'].downcase == input }
     exchange ? exchange['code'] : nil
   end
 
   def extract_stock_code(input, exchange_code)
-    return unless exchange_code
+    return if exchange_code.nil? || input.length < 3
 
     stocks = @stock_data.find { |ex| ex['code'] == exchange_code }['topStocks']
     stock = stocks.find { |s| s['stockName'].downcase.include?(input) || s['code'].downcase == input }
